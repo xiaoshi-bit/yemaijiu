@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="cn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="../css/初始化.css">
+    <style>
+        .inner {
+            position: relative
+        }
+
+        .inner>ul>li {
+            width: 1920px;
+            height: 500px;
+            top: 0;
+            left: 0;
+            position: absolute;
+        }
+
+        .zs {
+            z-index: 15;
+            background: blue;
+        }
+
+        .inner>ul {
+            position: absolute;
+        }
+
+        ol {
+            position: absolute;
+            top:420px;
+            left:600px;
+            width: 402px;
+            height: 52px;
+
+            z-index: 100;
+            
+            
+        }
+
+        ol>li {
+            margin-left: 15px;
+            float: left;
+            text-align: center;
+            line-height: 50px;
+            border: 1px solid transparent;
+            border-radius: 50%;
+            cursor: pointer;
+            width: 50px;
+            height: 50px;
+            background: red;
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <div class="inner">
+         <ul>
+            <li class="zs"></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul> 
+        <ol>
+            <li class="zs">1</li>
+            <li>2</li>
+            <li>3</li>
+            <li>4</li>
+            <li>5</li>
+            <li>6</li>
+        </ol>
+    </div>
+
+
+    <script src="../js/jquery-1.11.1.js"></script>
+    <script src="../js/轮播图放大缩小.js"></script>
+    </script>
+
+
+
+</body>
+
+</html>

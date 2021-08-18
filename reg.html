@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            font-family: "微软雅黑";
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        li {
+            list-style: none;
+        }
+
+        #box {
+            width: 398px;
+            min-height: 537px;
+            border: 1px solid #CCCCCC;
+            background: #f8f8f5;
+            margin: 20px auto;
+        }
+
+        #box > h3 {
+            width: 354px;
+            height: 56px;
+            line-height: 64px;
+            font-size: 16px;
+            margin: 0 auto;
+            border-bottom: 1px solid #ccc;
+            position: relative;
+        }
+
+        #box > h3 > a {
+            color: #0066cc;
+            font-size: 12px;
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            line-height: 20px;
+            font-weight: 400;
+        }
+
+        .form1 {
+            width: 354px;
+            margin: 43px auto 0;
+        }
+
+        label {
+            width: 70px;
+            display: inline-block;
+        }
+
+        #mobile, #password, #password1 {
+            width: 270px;
+            height: 43px;
+        }
+
+        #numcode {
+            width: 178px;
+            height: 43px;
+        }
+
+        input {
+            margin-bottom: 14px;
+            text-indent: 10px;
+        }
+
+        canvas {
+            display: inline-block;
+            width: 82px;
+            height: 30px;
+
+
+			vertical-align: middle;
+
+            cursor: pointer;
+        }
+
+        #sub {
+            width: 354px;
+            height: 45px;
+            background: #bb0e30;
+            line-height: 45px;
+            text-align: center;
+            color: #fff;
+            font-size: 16px;
+            font-weight: bold;
+            outline: none;
+            border: none;
+            margin-top: 20px;
+        }
+
+        .p_ {
+            margin-left: 78px;
+            color: red;
+            display: none;
+        }
+    </style>
+    <script src="../js/jquery-1.11.1.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+		var systemCode="";
+
+      	$(function () {
+      		//页面加载时 调用验证码功能
+      		systemCode=code();
+
+      		$("canvas").click(function () {
+      			//每次点击执行验证码功能
+				systemCode=code();
+
+
+			})
+
+
+
+		})
+
+
+        function code() {
+            var mycanvas = document.getElementsByTagName("canvas")[0];
+            var ctx = mycanvas.getContext("2d");
+
+//    随机点的数量
+            var totalPointNum = 40;
+//    随机线的数量
+            var totalLineNum = 15;
+//    验证码的宽度
+            var canvasWidth = 120;
+//    验证码的高度
+            var canvasHeight = 40;
+//    随机字符的内容
+            var str = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789";
+//    随机字符的数量
+            var totalCaseNum = 4;
+
+
+//    设置验证码宽高
+            mycanvas.width = canvasWidth;
+            mycanvas.height = canvasHeight;
+
+            //用来存储每次生成的验证码
+            var mycode = "";
+
+
+
+            //页面加载时 执行一次验证码显示
+            mycode = drawWords();
+            console.log(mycode);
+
+
+//    绘制随机字符的方法
+            function drawWords() {
+                //用来存储本次生成的验证码
+                var code = "";
+                //每次要画验证码之前 先把之前的内容清空
+                ctx.clearRect(0, 0, canvasWidth, canvasHeight)
+
+
+                drawPoint();
+                drawLine();
+
+                //针对字符大小对齐的处理
+                ctx.textBaseline = "middle";
+                ctx.font = "20px 微软雅黑";
+
+
+                for (var i = 0; i < totalCaseNum; i++) {
+                    ctx.beginPath();
+
+                    ctx.fillStyle = getRanColor(50, 140);
+
+                    //位移和旋转之前  把画布状态保存
+                    ctx.save();
+
+                    //位移当前canvas 然后再画
+                    ctx.translate(i * 30, 0)
+                    //旋转canvas 然后再画  旋转的角度是随机的 但是范围不能太大
+                    //为了这个随机数下面还能用 需要提前接收
+                    var randomAngle = Math.PI / 180 * getRanNum(-15, 15);
+                    ctx.rotate(randomAngle);
+
+
+                    //文字的位置是随机的
+                    //canvasWidth/totalCaseNum 动态计算 字符之间的间隔
+                    //随机的位置不能是宽高的头和尾 因为很有可能有些文字画出去一半
+                    var ranX = getRanNum(2, canvasWidth / totalCaseNum - 10);
+                    var ranY = getRanNum(8, canvasHeight - 10)
+
+                    //获取随机字符
+                    var ranS = str.charAt(parseInt(Math.random() * str.length));
+                    ctx.fillText(ranS, ranX, ranY);
+                    //把获取的随机字符拼接到验证码字符里面去
+                    code += ranS;
+
+
+                    //    把旋转和位移之前的状态读取回来
+                    ctx.restore();
+
+                }
+
+
+                //    该方法每次执行完 都要返回一个生成的验证码
+                return code;
+
+            }
+
+
+//    画随机点的方法
+            function drawPoint() {
+                for (var i = 0; i < totalPointNum; i++) {
+                    //    每次画新的点之前都要 开启新路径
+                    ctx.beginPath();
+                    //    设置随机的颜色
+                    ctx.fillStyle = getRanColor(140, 200);
+                    ctx.arc(getRanNum(0, 120), getRanNum(0, 40), 2, 0, Math.PI / 180 * 360);
+                    //实心的圆圈
+                    ctx.fill();
+
+                }
+
+
+            }
+
+//    画随机线的方法
+            function drawLine() {
+                for (var i = 0; i < totalLineNum; i++) {
+                    //    每画一条线之前都得开启新路径
+                    ctx.beginPath();
+                    //    设置随机颜色
+                    ctx.strokeStyle = getRanColor(140, 200);
+                    //    设置随机的起点
+                    ctx.moveTo(getRanNum(0, 120), getRanNum(0, 40));
+                    //    设置随机终点的
+                    ctx.lineTo(getRanNum(0, 120), getRanNum(0, 40));
+                    ctx.stroke();
+
+
+                }
+
+            }
+
+
+//    封装一个获取随机颜色的方法
+            //按照0~255 之间的随机数来确定随机颜色
+            //min和max是指定颜色随机的范围  (颜色分为浅色去 中间色区  深色区)
+            function getRanColor(min, max) {
+                if (min > max) {
+                    //    表示传错了
+                    //    变量交换
+                    var temp = min;
+                    min = max;
+                    max = temp;
+                }
+                //针对最小值和最大值判断
+                min = min < 0 ? 0 : min;
+                max = max > 255 ? 255 : max;
+
+                var r = getRanNum(min, max);
+                var g = getRanNum(min, max);
+                ;
+                var b = getRanNum(min, max);
+                ;
+
+                return "rgb(" + r + "," + g + "," + b + ")";
+
+            }
+
+
+//    封装一个获取 随机数的方法(从min到max之间的随机数 包含max)
+            function getRanNum(min, max) {
+                /*
+                    0~9之间的随机:
+                        parseInt(Math.random()*(9+1));
+
+                    3~9之间的随机
+                       parseInt(3+Math.random()*((9-3)+1))
+
+                 */
+                return parseInt(min + Math.random() * (max - min + 1));
+
+
+            }
+
+			return mycode;
+        }
+
+
+    </script>
+</head>
+<body>
+<div id="box">
+    <h3>注册也买酒<a href="">您可以使用QQ、支付宝、新浪微博登录</a></h3>
+    <div class="form1">
+        <form action="#" method="get" onsubmit="return end()">
+          	<p>
+				<label for="mobile">手机号码:</label>
+				<input  id="mobile" type="text" placeholder="输入手机号"/>
+			</p>
+            <p class="p_ p_1 mobile_error">请输入正确的手机号</p>
+          	<p>
+
+				<label for="numcode">验证码:</label>
+				<input id="numcode"  type="text" placeholder="请输入验证码"/>
+				<canvas  style="border: 1px solid #000;">
+					对不起,您的浏览器不支持canvas
+				</canvas>
+
+			</p>
+			<p class="p_ p_4 numcode_error">请输入正确的验证码</p>
+            <p>
+
+				<label for="password">密码:</label>
+				<input id="password" type="password" placeholder="密码设置为6-16位字母或数字"/>
+
+
+			</p>
+			<p class="p_ p_2 password_error">请输入正确的密码格式</p>
+
+
+          <p>
+			  <label for="password1">确认密码:</label>
+			  <input  id="password1" type="password" placeholder="再次输入登录密码"/>
+
+		  </p>
+            <p class="p_ p_3 password1_error">两次密码必须一致</p>
+          	<p>
+				<input type="checkbox"/>我有VIP升级码<br/>
+			</p>
+
+           <p>
+			   <input id="cke" type="checkbox"/>我已满18周岁并接受<a style="color: #0066cc;" href="">《也买酒服务条款》</a>
+
+		   </p>
+            <input id="sub" type="button" value="注册完成"/>
+        </form>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="cn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+
+
+    </style>
+    <link rel="stylesheet" href="">
+</head>
+
+<body>
+    <button>点击删除</button>
+    <button>点击设置</button>
+    <button>获取</button>
+    <button>修改</button>
+    <button>根据键取值</button>
+    <button>删除所有</button>
+
+    <script src="../js/jquery-1.11.1.js"></script>
+    <script src="../js/unit/cookieTools.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/blueimp-md5/2.18.0/js/md5.js"></script>
+    <script>
+
+
+
+
+
+
+        // 删除
+        $('button').eq(0).click(function () {
+            cookieTools.removeItem('username')
+
+        })
+
+        // 设置
+        $('button').eq(1).click(function () {
+           
+            cookieTools.setItem({
+                username:'hello',
+                age:13
+            })
+        })
+        // 获取
+        $('button').eq(2).click(function () {
+            console.log(cookieTools.getAllCookies());
+        })
+        // 修改
+        $('button').eq(3).click(function () {
+            cookieTools.modifyItem('username',123)
+
+        })
+        $('button').eq(4).click(function () {
+           console.log(cookieTools.getItem('username'));
+
+        })
+        $('button').eq(5).click(function () {
+           cookieTools.clear()
+
+        })
+
+
+
+
+
+
+    </script>
+</body>
+
+</html>

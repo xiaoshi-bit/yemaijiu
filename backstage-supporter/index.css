@@ -1,0 +1,131 @@
+html,body,h1,h2,h3,h4,h5,h6,div,p,span,a,i,b,ul,ol,li,dl,dd,dt{
+    margin: 0;
+    padding: 0;
+}
+.lf{
+    float: left;
+}
+.rt{
+    float:right;
+}
+.ch{
+    clear: both;
+}
+.re{
+    color: red;
+}
+.ge{
+    color: green;
+}
+ul.ol{
+    list-style: none;
+}
+html,body{
+    width: 100%;
+    height: 100%;
+}
+header{
+    width: 100%;
+    height: 70px;
+    background-color: #242F42;
+}
+header>.inner{
+    width: 20%;
+    height: 70px;
+    font-size: 25px;
+    text-align: center;
+    line-height: 70px;
+    color: #fff;
+}
+header>.denglu{
+    width: 128px;
+    height: 70px;
+    line-height: 70px;
+}
+header>.denglu>a{
+    color: #fff;
+    text-decoration: none;
+}
+section{
+    height:594px;
+}
+section>.inner{
+    width: 17%;
+    height: 100%;
+    background-color: #324157;
+}
+section>.inner>ul{
+list-style: none;
+}
+section>.inner>ul>li{
+    width: 100%;
+    height: 56px;
+    margin:0 auto;
+    line-height: 56px;
+    color: #20A0FF;
+    text-align: center;
+}
+section>.inner>ul:hover{
+    background-color: #48576A;
+}
+
+section>.you{
+    width: 83%;
+    height: 100%;
+}
+section>.you>ul{
+    width: 100%;
+    list-style: none;
+    /* margin-left: 100px; */
+    /* margin-top: 50px; */
+}
+section>.you>ul>li{
+    width: 24%;
+    height: 50px;
+    float: left;
+    border: 1px solid #999;
+    text-align: center;
+    line-height: 50px;
+    font-weight: 600;
+    background-color: #EEF1F6;
+}
+section>.you>ul>li:nth-child(1){
+    width: 15%;
+}
+section>.you>ul>li:nth-child(2){
+    width: 34%;
+}
+section>.you>ol{
+    list-style: none;
+    /* margin-left: 100px; */
+    width: 100%;
+}
+section>.you>ol>li{
+    width: 100%;
+    height: 50px;
+    /*border: 1px solid #999;*/
+    text-align: center;
+    /* margin: 0 auto; */
+}
+section>.you>ol>li>P{
+    width: 24%;
+    height: 100%;
+    border: 1px solid #999;
+    float: left;
+    line-height: 50px;
+}
+section>.you>ol>li>P:nth-child(1){
+     width: 15%;
+ }
+section>.you>ol>li>P:nth-child(2){
+    width: 34%;
+}
+section>.you>ol>li>P>input{
+    outline: none;
+}
+section>.you>ol>li>P>button{
+    outline: none;
+    border: none;
+    background-color: red;
+    color: #fff;
+}

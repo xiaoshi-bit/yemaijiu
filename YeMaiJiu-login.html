@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="cn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        #box {
+            width: 400px;
+            /* height: 300px; */
+            border: 1px solid #cccccc;
+            margin: 50px auto;
+        }
+
+        fieldset {
+            border: none;
+            margin: 20px auto;
+            width: 300px;
+
+            /* height: 260px; */
+        }
+
+        b {
+            margin: 0 30px;
+        }
+
+        form {
+            margin-top: 30px;
+        }
+
+        p {
+            margin-top: 15px;
+        }
+
+        #login {
+            margin: 30px 0;
+
+        }
+
+        button {
+            width: 240px;
+            height: 30px;
+            color: white;
+            border: none;
+            background-color: #d10000;
+            cursor: pointer;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 240px;
+            height: 25px;
+        }
+
+
+        p.mobile_error,
+        p.password_error {
+            color: red;
+            display: none;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div id="box">
+
+        <fieldset>
+            <legend>............<b>登录也买酒</b>.............................</legend>
+            <form action="#" method="post">
+                <p><input type="text" placeholder="输入手机号" id="mobile" name='phone'></p>
+                <p class="mobile_error">手机号不对</p>
+                <p><input type="password" placeholder="输入密码" id="password" name='password'></p>
+                <p class="password_error">密码不对</p>
+                <p><input type='checkbox' id='login' value="自动登录"><label for="login">自动登录</label></p>
+                <p><button type="button" id="btn">登录</button></p>
+            </form>
+        </fieldset>
+    </div>
+
+</body>
+<script src="../js/jquery-1.11.1.js"></script>
+<script src="../js/unit/checkStr.js"></script>
+<script src="../js/unit/md5.js"></script>
+<script src="../js/api/api.js"></script>
+<script>
+    $(function () {
+
+        // 点击登录按钮，验证输入的内容
+        $('#btn').click(function () {
+            if (!checkLogin.checkMobile($('#mobile').val())) {
+                $('.mobile_error').html('手机号不对').show();
+                return
+            } else {
+                $('.mobile_error').hide()
+            }
+            if (!checkLogin.checkPasswords($('#password').val())) {
+                $('.password_error').html('密码不对').show();
+                return
+            } else {
+                $('.password_error').hide()
+            }
+
+            getAjaxData()
+
+            
+        })
+
+        function getAjaxData() {
+            $.ajax({
+                url: url.loginUrl,
+                method: 'post',
+                dataType: 'json',
+                data: {
+                    mobile: $('#mobile').val(),
+                    password: md5($('#password').val())
+                },
+                success: function (res) {
+                   
+                    if(res.code==200){
+                        
+                       location.replace('YeMaiJiu-index.html')
+
+                    }
+                },
+                error:function (err) {
+                    console.log(err);
+                }
+            })
+
+        }
+    })
+</script>
+</html>

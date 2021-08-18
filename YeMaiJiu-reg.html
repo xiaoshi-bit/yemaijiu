@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="cn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="../css/初始化.css">
+
+    <style>
+        body>div {
+            border: 1px solid #ccc;
+            overflow: hidden;
+            width: 500px;
+            /* height: 640px; */
+            margin: 50px auto;
+            background: #f8f8f5;
+        }
+
+
+        div.char {
+            overflow: hidden;
+            width: 450px;
+            height: 50px;
+            margin: 20px;
+            /* background: red; */
+            border-bottom: 1px solid #f8f8f5;
+        }
+
+        div.char>a {
+            float: right;
+            line-height: 80px;
+        }
+
+        form {
+
+            /* border: 1px solid red; */
+            width: 450px;
+            margin-left: 25px;
+            /* text-align: center; */
+            background: #f8f8f5;
+            /* margin: 50px; */
+        }
+
+        /* #fo {
+            margin-left: 20px;
+        } */
+
+        label {
+            display: inline-block;
+            width: 80px;
+        }
+
+        input#mobile,
+        #vCode,
+        #password,
+        #passwordY {
+            width: 280px;
+            height: 50px;
+            margin: 30px 0 0 10px;
+        }
+
+        input#vCode {
+            width: 200px;
+        }
+
+
+
+        form>span.yzm {
+
+            display: inline-block;
+            width: 80px;
+            background: white;
+            line-height: 50px;
+            text-align: center;
+            font-size: 19px;
+            letter-spacing: 8px;
+            cursor: pointer;
+        }
+
+
+        form>p {
+            margin: 30px 0;
+        }
+
+        div.err0,
+        div.err1,
+        div.err2,
+        div.err3 {
+            display: none;
+            margin-left: 100px;
+            /* background: red; */
+            color: red;
+        }
+
+
+        div.btn {
+            width: 100%;
+            height: 50px;
+            background: #bb0e30;
+            color: white;
+            font-size: 20px;
+            text-align: center;
+            line-height: 50px;
+            margin-bottom: 30px;
+            cursor: pointer;
+        }
+
+        #sjm {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <div class="char"><b>注册也买酒</b> <a href="javascript:;">可以使用各种方法登录</a>
+
+        </div>
+        <!-- <div id="fo"> -->
+        <form action="#">
+            <label for="mobile">手机号码:</label> <input type="text" id="mobile" name="mobile" placeholder="输入手机号"><br>
+            <div class="err0 ">*手机号不正确</div>
+            <label for="vCode">验证码:</label> <input type="text" id='vCode' name="vCode" placeholder="验证码"><span
+                class="yzm">这里是验证码</span><br>
+            <div class="err1 ">*验证码不正确</div>
+            <label for="password">密码:</label> <input type="password" id='password' name="password"
+                placeholder="6-16位密码"><br>
+            <div class="err2">*密码格式不对</div>
+            <label for="passwordY">确认密码:</label> <input type="password" id='passwordY' placeholder="再次输入密码"><br>
+            <div class="err3">*两次密码不一样</div>
+            <p>
+                <input id="sjmbtn" type="checkbox"><span >我有VIP升级码</span><br>
+                <input id="sjm" type="text">
+            </p>
+            <p>
+                <input id="protocol" type="checkbox"><span>我已满18并接受 <a href="javascript:;">也买酒协议</a></span><br>
+            </p>
+            <div class="btn">注册完成</div>
+        </form>
+        <!-- </div> -->
+    </div>
+    <script src="../js/jquery-1.11.1.js"></script>
+    <!-- 验证手机密码 -->
+    <script src="../js/unit/checkStr.js"></script>
+    <!-- ajax路径 -->
+    <script src="../js/api/api.js"></script>
+    <!-- cookie -->
+    <script src="../js/unit/cookieTools.js"></script>
+    <!-- 加密插件 -->
+    <script src="../js/unit/md5.js"></script>
+
+
+    <script>
+        // 验证码数组
+        var yzm = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
+        // 验证码
+        var yzmStr = ''
+
+
+        // 随机生成的四位数
+        function show() {
+            yzmStr = ''
+            // 得到四个验证码
+            for (var i = 0; i < 4; i++) {
+                yzmStr += yzm[0 + Math.floor(Math.random() * ((yzm.length - 1) - 0 + 1))]
+            }
+
+            return yzmStr
+        }
+
+        // 页面刷新后展示一波验证码
+        $('.yzm').html(show())
+
+
+        // 点击验证码处更改验证码
+        $('.yzm').click(function () {
+            $(this).html('')
+            $(this).html(show())
+
+        })
+
+        // 判断升级码是否勾选,如果勾选的话把升级码框显示出来
+       $('#sjmbtn').get(0).oninput=function(){
+            if($(this).prop('checked')){
+                $('#sjm').show()
+            }else{
+                $('#sjm').hide()
+            }
+       }
+
+
+
+      
+
+           
+       
+
+
+        // 点击按钮注册
+        $('.btn').click(function () {
+            // 校验手机
+            if (!checkLogin.checkMobile($('#mobile').val())) {
+                $('.err0').show()
+                return
+            } else {
+                $('.err0').hide()
+            }
+
+            // 校验验证码
+            if ($('#vCode').val().toUpperCase() != yzmStr.toUpperCase()) {
+                $('.err1').show()
+                return
+            } else {
+                $('.err1').hide()
+            }
+            // 验证密码
+            if (!checkLogin.checkPasswords($('#password').val())) {
+                $('.err2').show()
+                return
+            } else {
+                $('.err2').hide()
+            }
+            // 两次的必须一样
+            if ($('#passwordY').val() != $('#password').val()) {
+                $('.err3').show()
+                return
+            } else {
+                $('.err3').hide()
+            }
+            // 用户协议必须勾选
+            if (!$('#protocol').prop('checked')) {
+                alert('阅读并打勾')
+                return
+
+            }
+
+            // 升级码勾选并且写东西了才可以继续运行
+            if(!($('#sjmbtn').prop('checked')&&$('#sjm').val().length!=0)){
+               alert('如果有升级码请填写')
+                return
+            }
+            // 手机号查重
+            $.ajax({
+                url: url.checkUrl,
+                dataType: 'json',
+                data: {
+                    mobile: $('#mobile').val()
+                },
+                success: function (res) {
+                    if (res.code == 200) {
+                        // 不重复的话，进行注册功能
+                        $.ajax({
+                            url: url.regUrl,
+                            method: 'POST',
+                            dataType: 'json',
+                            data: {
+                                mobile: $('#mobile').val(),
+                                password: md5($('#password').val())
+                            },
+                            success: function (rel) {
+                                if (rel.code == 200) {
+                                    sessionStorage.setItem('mobile', $('#mobile').val())
+                                    alert(res.msg)
+                                    location.replace('login.html')
+                                } else {
+                                    alert(res.msg)
+                                }
+                            }
+                        })
+                    } else {
+                        // 清空输入框里内容，并刷新一次验证码
+                        $('#mobile').val('')
+                        $('#vCode').val('')
+                        $('#password').val('')
+                        $('#passwordY').val('')
+                        $('.yzm').html(show())
+                        alert(res.msg)
+                    }
+                }
+            })
+
+
+        })
+
+
+
+
+    </script>
+
+</body>
+
+</html>

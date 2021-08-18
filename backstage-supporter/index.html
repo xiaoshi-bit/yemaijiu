@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="cn">
+<head>
+    <meta charset="UTF-8">
+    <title>后台管理页</title>
+    <link rel="stylesheet" href="index.css">
+
+</head>
+<body>
+    <header>
+        <div class="inner lf">
+            后台管理系统
+        </div>
+        <div class="denglu rt">
+            <a href="#">登录</a>
+        </div>
+    </header>
+    <section>
+        <div class="inner lf">
+            <ul>
+                <li>价格修改</li>
+            </ul>
+        </div>
+
+        <div class="you lf">
+            <ul>
+                <li>编号</li>
+                <li>名称</li>
+                <li>原始价格</li>
+                <li>修改价格</li>
+            </ul>
+            <div class="ch"></div>
+            <ol id="oltab">
+                <!--<li>
+                <p>1</p>
+               <p>夏普朗城堡干红葡萄酒</p>
+               <p>28</p>
+               <p>
+                   <input type="text">
+                    <button>修改</button>
+               </p>
+           </li>-->
+
+
+
+            </ol>
+        </div>
+
+    </section>
+    <script src="jquery-1.11.3.js"></script>
+    <script>
+
+
+        $(function () {
+
+            // 渲染页面请求的get
+
+            var applyUrl = "https://mock.yufenghen.cn/yemaijiu/yemaijiuserver/admin/maylikeadmin.php"
+
+
+            // 更改数据的请求  使用post提交wineid和newprice参数
+            var changeUrl = "https://mock.yufenghen.cn/yemaijiu/yemaijiuserver/admin/modifyprice.php"
+
+
+
+            $('#oltab').on('click', 'button', function () {
+                // 输入框内容
+                var inpVal = $(this).prev().val()
+
+                // 输入框
+                var inp = $(this).prev()
+
+                //  id
+                var wineid = $(this).parent().parent().children().eq(0).html()
+
+                // 原始金额
+                var price = $(this).parent().parent().children().eq(2)
+
+
+                // 传的只能是数字
+                if (inpVal == '' || isNaN(inpVal)) {
+                    alert('请传金额')
+                    return
+                }
+
+                // 使用post提交wineid和newprice参数
+                $.ajax({
+                    url: changeUrl,
+                    dataType: 'json',
+                    method: 'POST',
+                    data: {
+                        wineid: wineid,
+                        newprice: inpVal
+                    },
+                    success: function (res) {
+                        // alert(res.msg)
+                        if (res.code == 200) {
+                            price.html(inpVal)
+                            inp.val('')
+                        }
+                    }
+                })
+
+            })
+
+
+
+
+            // 把数据渲染到页面
+            getData()
+
+
+
+
+
+
+            // 获取后台数据，并渲染到页面
+            function getData() {
+                $.ajax({
+                    url: applyUrl,
+                    dataType: 'json',
+                    success: function (res) {
+                        $('#oltab').empty();
+                        res.forEach(function (item) {
+
+                            $('#oltab').append(`
+                        <li>
+                            <p>${item.id}</p>
+                            <p>${item.name}</p>
+                            <p>${item.price}</p>
+                            <p>
+                                <input type="text">
+                                <button>修改</button>
+                            </p>
+                        </li>
+                                
+                        `)
+                        })
+
+
+
+
+                    }
+                })
+            }
+
+
+
+
+        })
+    </script>
+
+
+
+
+
+
+
+
+</body>
+</html>
